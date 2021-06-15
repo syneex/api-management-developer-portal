@@ -61,7 +61,7 @@ import { OldContentRouteGuard } from "./routing/oldContentRouteGuard";
 import { AccessTokenRefrsher } from "./authentication/accessTokenRefresher";
 import { ApiProductsModule } from "./components/apis/api-products/ko/apiProducts.module";
 import { ApiProductsEditorModule } from "./components/apis/api-products/ko/apiProductsEditor.module";
-import { ConfigBroker } from "./publishing/configBroker";
+import { RuntimeConfigBroker } from "./services/runtimeConfigBroker";
 
 
 export class ApimDesignModule implements IInjectorModule {
@@ -132,6 +132,6 @@ export class ApimDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", AccessTokenRefrsher);
 
-        injector.bindToCollection("autostart", ConfigBroker);
+        injector.bindToCollection("autostart", RuntimeConfigBroker);
     }
 }

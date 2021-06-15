@@ -1,25 +1,31 @@
-import { SettingNames } from "./../constants";
 import { ISettingsProvider } from "@paperbits/common/configuration";
-import { AadClientConfig } from "../contracts/aadClientConfig";
+import { IdentityService } from ".";
+import { SettingNames } from "../constants";
 import { AadB2CClientConfig } from "../contracts/aadB2cClientConfig";
-import { IdentityService } from "../services";
+import { AadClientConfig } from "../contracts/aadClientConfig";
+import { SessionManager } from "./../authentication/sessionManager";
 
-export class ConfigBroker {
+export class RuntimeConfigBroker {
     constructor(
         private readonly identityService: IdentityService,
-        private readonly settingsProvider: ISettingsProvider
+        private readonly settingsProvider: ISettingsProvider,
+        private readonly sessionManager: SessionManager
     ) {
         this.loadConfiguration();
     }
 
     public async loadConfiguration(): Promise<void> {
         const designTimeSettings = {};
+
+        /* Common providers */
         const managementApiUrl = await this.settingsProvider.getSetting(SettingNames.managementApiUrl);
-
+        const backendUrl = await this.settingsProvider.getSetting(SettingNames.backendUrl);
+        
         designTimeSettings[SettingNames.managementApiUrl] = managementApiUrl;
+        designTimeSettings[SettingNames.backendUrl] = backendUrl;
 
+        /* Identity providers */
         const identityProviders = await this.identityService.getIdentityProviders();
-
         const aadIdentityProvider = identityProviders.find(x => x.type === SettingNames.aadClientConfig);
 
         if (aadIdentityProvider) {
@@ -53,6 +59,6 @@ export class ConfigBroker {
             designTimeSettings[SettingNames.aadB2CClientConfig] = aadB2CConfig;
         }
 
-        sessionStorage.setItem("designTimeSettings", JSON.stringify(designTimeSettings));
+        this.sessionManager.setItem("designTimeSettings", JSON.stringify(designTimeSettings));
     }
 }
