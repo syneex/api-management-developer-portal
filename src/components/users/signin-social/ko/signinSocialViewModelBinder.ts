@@ -48,7 +48,8 @@ export class SigninSocialViewModelBinder implements ViewModelBinder<SigninSocial
         if (aadIdentityProvider) {
             const aadConfig = {
                 classNames: classNames,
-                label: model.aadLabel
+                label: model.aadLabel,
+                replyUrl: model.aadReplyUrl || undefined
             };
             viewModel.aadConfig(JSON.stringify(aadConfig));
         }
@@ -58,7 +59,8 @@ export class SigninSocialViewModelBinder implements ViewModelBinder<SigninSocial
         if (aadB2CIdentityProvider) {
             const aadB2CConfig = {
                 classNames: classNames,
-                label: model.aadB2CLabel
+                label: model.aadB2CLabel,
+                replyUrl: model.aadB2CReplyUrl || undefined
             };
 
             viewModel.aadB2CConfig(JSON.stringify(aadB2CConfig));

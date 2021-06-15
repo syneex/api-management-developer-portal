@@ -27,6 +27,7 @@ export class SignInAadB2C {
     ) {
         this.classNames = ko.observable();
         this.label = ko.observable();
+        this.replyUrl = ko.observable();
     }
 
     @Param()
@@ -34,6 +35,9 @@ export class SignInAadB2C {
 
     @Param()
     public label: ko.Observable<string>;
+
+    @Param()
+    public replyUrl: ko.Observable<string>;
 
     @OnMounted()
     public async initialize(): Promise<void> {
@@ -49,7 +53,12 @@ export class SignInAadB2C {
         const config = await this.settingsProvider.getSetting<AadB2CClientConfig>(SettingNames.aadB2CClientConfig);
 
         try {
-            await this.aadService.runAadB2CUserFlow(config.clientId, config.authority, config.signinTenant, config.signinPolicyName);
+            await this.aadService.runAadB2CUserFlow(
+                config.clientId,
+                config.authority,
+                config.signinTenant,
+                config.signinPolicyName,
+                this.replyUrl());
         }
         catch (error) {
             if (config.passwordResetPolicyName && error.message.includes(aadb2cResetPasswordErrorCode)) { // Reset password requested
@@ -62,7 +71,7 @@ export class SignInAadB2C {
                 }
             }
 
-            let errorDetails;
+            let errorDetails: string[];
 
             if (error.code === "ValidationError") {
                 errorDetails = error.details?.map(detail => detail.message);

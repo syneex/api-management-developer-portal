@@ -20,7 +20,7 @@ export class AadConfigPublisher implements IPublisher {
 
         const identityProviders = await this.identityService.getIdentityProviders();
 
-        const aadIdentityProvider = identityProviders.find(x => x.type === "aad");
+        const aadIdentityProvider = identityProviders.find(x => x.type === SettingNames.aadClientConfig);
 
         if (aadIdentityProvider) {
             const aadConfig: AadClientConfig = {
@@ -32,7 +32,7 @@ export class AadConfigPublisher implements IPublisher {
             this.runtimeConfigBuilder.addSetting(SettingNames.aadClientConfig, aadConfig);
         }
 
-        const aadB2CIdentityProvider = identityProviders.find(x => x.type === "aadB2C");
+        const aadB2CIdentityProvider = identityProviders.find(x => x.type === SettingNames.aadB2CClientConfig);
 
         if (aadB2CIdentityProvider) {
             let signinTenant = aadB2CIdentityProvider.signinTenant;

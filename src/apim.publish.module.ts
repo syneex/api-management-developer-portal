@@ -77,6 +77,7 @@ export class ApimPublishModule implements IInjectorModule {
 
         injector.bindSingleton("runtimeConfigBuilder", RuntimeConfigBuilder);
         injector.bindToCollection("publishers", AadConfigPublisher);
-        injector.bindToCollection("publishers", AadConfigPublisher);
+        injector.bindToCollection("publishers", RuntimeConfigPublisher);
+        
     }
 }

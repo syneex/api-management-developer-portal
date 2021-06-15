@@ -20,7 +20,7 @@ export class ConfigBroker {
 
         const identityProviders = await this.identityService.getIdentityProviders();
 
-        const aadIdentityProvider = identityProviders.find(x => x.type === "aad");
+        const aadIdentityProvider = identityProviders.find(x => x.type === SettingNames.aadClientConfig);
 
         if (aadIdentityProvider) {
             const aadConfig: AadClientConfig = {
@@ -29,10 +29,10 @@ export class ConfigBroker {
                 signinTenant: aadIdentityProvider.signinTenant
             };
 
-            designTimeSettings["aad"] = aadConfig;
+            designTimeSettings[SettingNames.aadClientConfig] = aadConfig;
         }
 
-        const aadB2CIdentityProvider = identityProviders.find(x => x.type === "aadB2C");
+        const aadB2CIdentityProvider = identityProviders.find(x => x.type === SettingNames.aadB2CClientConfig);
 
         if (aadB2CIdentityProvider) {
             let signinTenant = aadB2CIdentityProvider.signinTenant;
@@ -50,7 +50,7 @@ export class ConfigBroker {
                 passwordResetPolicyName: aadB2CIdentityProvider.passwordResetPolicyName,
             };
 
-            designTimeSettings["aadB2C"] = aadB2CConfig;
+            designTimeSettings[SettingNames.aadB2CClientConfig] = aadB2CConfig;
         }
 
         sessionStorage.setItem("designTimeSettings", JSON.stringify(designTimeSettings));

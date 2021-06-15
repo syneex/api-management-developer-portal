@@ -24,6 +24,7 @@ export class SignInAad {
     ) {
         this.classNames = ko.observable();
         this.label = ko.observable();
+        this.replyUrl = ko.observable();
     }
 
     @Param()
@@ -31,6 +32,10 @@ export class SignInAad {
 
     @Param()
     public label: ko.Observable<string>;
+
+    @Param()
+    public replyUrl: ko.Observable<string>;
+
 
     /**
      * Initiates signing-in with Azure Active Directory.
@@ -40,7 +45,7 @@ export class SignInAad {
 
         try {
             const config = await this.settingsProvider.getSetting<AadClientConfig>(SettingNames.aadClientConfig);
-            await this.aadService.signInWithAadAdal(config.clientId, config.authority, config.signinTenant);
+            await this.aadService.signInWithAadAdal(config.clientId, config.authority, config.signinTenant, this.replyUrl());
         }
         catch (error) {
             let errorDetails;
