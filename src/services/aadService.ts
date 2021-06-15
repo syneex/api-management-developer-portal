@@ -9,14 +9,13 @@ import { ISettingsProvider } from "@paperbits/common/configuration";
 import { RouteHelper } from "../routing/routeHelper";
 import { UsersService } from "./usersService";
 import { MapiClient } from "./mapiClient";
+import { AadB2CClientConfig } from "../contracts/aadB2CClientConfig";
 
 /**
  * Service for operations with Azure Active Directory identity provider.
  */
 export class AadService {
     constructor(
-        private readonly authenticator: IAuthenticator,
-        private readonly httpClient: HttpClient,
         private readonly settingsProvider: ISettingsProvider,
         private readonly router: Router,
         private readonly routeHelper: RouteHelper,
@@ -155,6 +154,19 @@ export class AadService {
         if (response.idToken && response.idToken.rawIdToken) {
             await this.exchangeIdToken(response.idToken.rawIdToken, Constants.IdentityProviders.aadB2C);
         }
+    }
+
+    public async signOutAadB2C(): Promise<void> {
+        const config = await this.settingsProvider.getSetting<AadB2CClientConfig>(Constants.SettingNames.aadClientConfig);
+
+        const msalConfig = {
+            auth: {
+                clientId: config.clientId,
+            }
+        };
+
+        const msalInstance = new Msal.UserAgentApplication(msalConfig);
+        msalInstance.logout();
     }
 
     /**

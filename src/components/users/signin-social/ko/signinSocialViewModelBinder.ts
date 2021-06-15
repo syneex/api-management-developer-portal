@@ -1,10 +1,10 @@
 import { Bag } from "@paperbits/common";
-import { ViewModelBinder } from "@paperbits/common/widgets";
-import { StyleCompiler } from "@paperbits/common/styles";
-import { SigninSocialViewModel } from "./signinSocialViewModel";
-import { SigninSocialModel } from "../signinSocialModel";
-import { IdentityService } from "../../../../services/identityService";
 import { EventManager } from "@paperbits/common/events";
+import { StyleCompiler } from "@paperbits/common/styles";
+import { ViewModelBinder } from "@paperbits/common/widgets";
+import { IdentityService } from "../../../../services/identityService";
+import { SigninSocialModel } from "../signinSocialModel";
+import { SigninSocialViewModel } from "./signinSocialViewModel";
 
 
 export class SigninSocialViewModelBinder implements ViewModelBinder<SigninSocialModel, SigninSocialViewModel> {
@@ -42,13 +42,11 @@ export class SigninSocialViewModelBinder implements ViewModelBinder<SigninSocial
         }
 
         const identityProviders = await this.identityService.getIdentityProviders();
+
         const aadIdentityProvider = identityProviders.find(x => x.type === "aad");
 
         if (aadIdentityProvider) {
             const aadConfig = {
-                clientId: aadIdentityProvider.clientId,
-                authority: aadIdentityProvider.authority,
-                signinTenant: aadIdentityProvider.signinTenant,
                 classNames: classNames,
                 label: model.aadLabel
             };
@@ -58,18 +56,7 @@ export class SigninSocialViewModelBinder implements ViewModelBinder<SigninSocial
         const aadB2CIdentityProvider = identityProviders.find(x => x.type === "aadB2C");
 
         if (aadB2CIdentityProvider) {
-            let signinTenant = aadB2CIdentityProvider.signinTenant;
-
-            if (!signinTenant && aadB2CIdentityProvider.allowedTenants.length > 0) {
-                signinTenant = aadB2CIdentityProvider.allowedTenants[0];
-            }
-
             const aadB2CConfig = {
-                clientId: aadB2CIdentityProvider.clientId,
-                authority: aadB2CIdentityProvider.authority,
-                instance: signinTenant,
-                signInPolicy: aadB2CIdentityProvider.signinPolicyName,
-                passwordResetPolicyName: aadB2CIdentityProvider.passwordResetPolicyName,
                 classNames: classNames,
                 label: model.aadB2CLabel
             };

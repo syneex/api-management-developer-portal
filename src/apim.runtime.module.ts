@@ -68,6 +68,7 @@ import { DefaultSessionManager } from "./authentication/defaultSessionManager";
 import { ApiProducts } from "./components/apis/api-products/ko/runtime/api-products";
 import { ApiProductsTiles } from "./components/apis/api-products/ko/runtime/api-products-tiles";
 import { ProductListTiles } from "./components/products/product-list/ko/runtime/product-list-tiles";
+import { AadSignOutRouteGuard } from "./routing/aadSignoutRouteGuard";
 
 export class ApimRuntimeModule implements IInjectorModule {
     public register(injector: IInjector): void {
@@ -75,6 +76,8 @@ export class ApimRuntimeModule implements IInjectorModule {
         injector.bindToCollection("autostart", UnhandledErrorHandler);
         injector.bindToCollection("autostart", BalloonBindingHandler);
         injector.bindToCollection("autostart", ResizableBindingHandler);
+
+        injector.bindToCollection("routeGuards", AadSignOutRouteGuard);
         injector.bindToCollection("routeGuards", SignOutRouteGuard);
         injector.bind("apiList", ApiList);
         injector.bind("apiListDropdown", ApiListDropdown);

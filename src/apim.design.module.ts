@@ -61,6 +61,7 @@ import { OldContentRouteGuard } from "./routing/oldContentRouteGuard";
 import { AccessTokenRefrsher } from "./authentication/accessTokenRefresher";
 import { ApiProductsModule } from "./components/apis/api-products/ko/apiProducts.module";
 import { ApiProductsEditorModule } from "./components/apis/api-products/ko/apiProductsEditor.module";
+import { ConfigBroker } from "./publishing/configBroker";
 
 
 export class ApimDesignModule implements IInjectorModule {
@@ -130,5 +131,7 @@ export class ApimDesignModule implements IInjectorModule {
         injector.bindSingleton("oauthService", OAuthService);
         injector.bindToCollection("autostart", HistoryRouteHandler);
         injector.bindToCollection("autostart", AccessTokenRefrsher);
+
+        injector.bindToCollection("autostart", ConfigBroker);
     }
 }

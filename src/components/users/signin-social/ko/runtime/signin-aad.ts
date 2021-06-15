@@ -1,9 +1,12 @@
-import * as ko from "knockout";
-import template from "./signin-aad.html";
+import { ISettingsProvider } from "@paperbits/common/configuration";
 import { EventManager } from "@paperbits/common/events";
-import { Component, RuntimeComponent, Param } from "@paperbits/common/ko/decorators";
+import { Component, Param, RuntimeComponent } from "@paperbits/common/ko/decorators";
+import * as ko from "knockout";
 import { ValidationReport } from "../../../../../contracts/validationReport";
 import { AadService } from "../../../../../services";
+import { SettingNames } from "./../../../../../constants";
+import { AadClientConfig } from "./../../../../../contracts/aadClientConfig";
+import template from "./signin-aad.html";
 
 
 @RuntimeComponent({
@@ -16,23 +19,12 @@ import { AadService } from "../../../../../services";
 export class SignInAad {
     constructor(
         private readonly aadService: AadService,
-        private readonly eventManager: EventManager
+        private readonly eventManager: EventManager,
+        private readonly settingsProvider: ISettingsProvider
     ) {
-        this.clientId = ko.observable();
-        this.authority = ko.observable();
-        this.signinTenant = ko.observable();
         this.classNames = ko.observable();
         this.label = ko.observable();
     }
-
-    @Param()
-    public clientId: ko.Observable<string>;
-
-    @Param()
-    public authority: ko.Observable<string>;
-
-    @Param()
-    public signinTenant: ko.Observable<string>;
 
     @Param()
     public classNames: ko.Observable<string>;
@@ -47,7 +39,8 @@ export class SignInAad {
         this.cleanValidationErrors();
 
         try {
-            await this.aadService.signInWithAadAdal(this.clientId(), this.authority(), this.signinTenant());
+            const config = await this.settingsProvider.getSetting<AadClientConfig>(SettingNames.aadClientConfig);
+            await this.aadService.signInWithAadAdal(config.clientId, config.authority, config.signinTenant);
         }
         catch (error) {
             let errorDetails;
