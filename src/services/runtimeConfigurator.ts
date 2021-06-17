@@ -5,7 +5,7 @@ import { SettingNames } from "../constants";
 import { AadB2CClientConfig } from "../contracts/aadB2cClientConfig";
 import { AadClientConfig } from "../contracts/aadClientConfig";
 
-export class RuntimeConfigBroker {
+export class RuntimeConfigurator {
     constructor(
         private readonly identityService: IdentityService,
         private readonly settingsProvider: ISettingsProvider,
