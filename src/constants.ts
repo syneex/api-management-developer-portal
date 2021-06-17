@@ -13,6 +13,7 @@ export enum ServiceSkuName {
  * Types of API.
  */
 export enum TypeOfApi {
+    webSocket = "websocket",
     soap = "soap",
     http = "http"
 }
@@ -123,7 +124,7 @@ export enum GrantTypes {
     password = "password"
 }
 
-export const managementApiVersion = "2019-12-01";
+export const managementApiVersion = "2021-01-01-preview";
 
 /**
  * Developer portal type (self-hosted or managed).
