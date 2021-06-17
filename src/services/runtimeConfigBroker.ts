@@ -1,9 +1,9 @@
 import { ISettingsProvider } from "@paperbits/common/configuration";
+import { SessionManager } from "@paperbits/common/persistence/sessionManager";
 import { IdentityService } from ".";
 import { SettingNames } from "../constants";
 import { AadB2CClientConfig } from "../contracts/aadB2cClientConfig";
 import { AadClientConfig } from "../contracts/aadClientConfig";
-import { SessionManager } from "./../authentication/sessionManager";
 
 export class RuntimeConfigBroker {
     constructor(

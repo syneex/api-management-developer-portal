@@ -1,3 +1,4 @@
+import { DefaultSessionManager } from "./authentication/defaultSessionManager";
 import * as Constants from "./constants";
 import { UnsavedChangesRouteGuard } from "./routing/unsavedChangesRouteGuard";
 import { MapiObjectStorage, MapiBlobStorage } from "./persistence";
@@ -133,5 +134,6 @@ export class ApimDesignModule implements IInjectorModule {
         injector.bindToCollection("autostart", AccessTokenRefrsher);
 
         injector.bindToCollection("autostart", RuntimeConfigBroker);
+        injector.bindSingleton("sessionManager", DefaultSessionManager);
     }
 }
