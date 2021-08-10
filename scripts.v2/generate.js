@@ -8,15 +8,19 @@ const sourceFolder = process.argv[4];
 async function generateJson() {
     try {
         const data = fs.readFileSync(`${sourceFolder}/data.json`);
+        console.log(`${sourceFolder}/data.json`);
         const dataObj = JSON.parse(data);
         const keys = Object.keys(dataObj);
+        console.log(keys);
 
         for (const key of keys) {
+            // for local debugging
+            console.log(JSON.stringify(dataObj[key]));
             await request(
                 "PUT",
-                `https://${managementApiEndpoint}/subscriptions/00000/resourceGroups/00000/providers/Microsoft.ApiManagement/service/00000/${key}?api-version=2019-12-01`,
+                `https://${managementApiEndpoint}/subscriptions/00000/resourceGroups/00000/providers/Microsoft.ApiManagement/service/00000${key}?api-version=2019-12-01`,
                 managementApiAccessToken,
-                JSON.stringify(dataObj[key]));
+                dataObj[key]);
         }
     }
     catch (error) {

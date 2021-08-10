@@ -61,7 +61,8 @@ async function request(method, url, accessToken, body) {
     const headers = {
         "If-Match": "*",
         "Content-Type": "application/json",
-        "Authorization": accessToken
+        "Authorization": accessToken,
+        "Connection": "keep-alive"
     };
 
     if (body) {
@@ -117,6 +118,8 @@ async function request(method, url, accessToken, body) {
             req.write(requestBody);
         }
 
+        console.log(requestBody);
+
         req.end();
     });
 }
@@ -132,7 +135,9 @@ async function downloadBlobs(blobStorageUrl, snapshotMediaFolder) {
 
         for await (const blob of blobs) {
             const blockBlobClient = containerClient.getBlockBlobClient(blob.name);
-            const extension = mime.getExtension(blob.properties.contentType);
+            // optional - use mime@2.5.2 
+            // const extension = mime.getExtension(blob.properties.contentType);
+            const extension = mime.getType(blob.properties.contentType);
             let pathToFile;
 
             if (extension != null) {
